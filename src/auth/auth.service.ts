@@ -9,13 +9,15 @@ import { Role } from 'src/user/enum/user-role.enum';
 import { LoginUserResponseDto } from './dto/login-user-response.dto';
 import { JwtPayloadData } from './interface/jwt-payload.interface';
 import { jwtConstants } from './constant/auth.constant';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
 
   constructor(
     private readonly userService: UserService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService
   ){}
 
   async registerUser(registerUserDto: RegisterUserRequestDto): Promise<RegisterUserResponseDto> {
@@ -62,16 +64,16 @@ export class AuthService {
       this.jwtService.signAsync(
         payload,
         {
-          secret: jwtConstants.secret_access,
-          expiresIn: jwtConstants.access_expiration
+          secret: this.configService.get('JWT_ACCESS_SECRET'),
+          expiresIn: this.configService.get('JWT_ACCESS_EXPIRATION')
         }
       ),
 
       this.jwtService.signAsync(
         payload,
         {
-          secret: jwtConstants.secret_refresh,
-          expiresIn: jwtConstants.refresh_expiration
+          secret: this.configService.get('JWT_REFRESH_SECRET'),
+          expiresIn: this.configService.get('JWT_REFRESH_EXPIRATION')
         }
       )
     ]);
@@ -89,8 +91,8 @@ export class AuthService {
     }
 
     return await this.jwtService.signAsync(payload, {
-      secret: jwtConstants.secret_access,
-      expiresIn: jwtConstants.access_expiration
+        secret: this.configService.get('JWT_ACCESS_SECRET'),
+        expiresIn: this.configService.get('JWT_ACCESS_EXPIRATION')
     })
   }
 
