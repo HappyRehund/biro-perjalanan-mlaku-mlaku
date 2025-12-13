@@ -1,34 +1,49 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { RegisterUserRequestDto } from './dto/register-user-request.dto';
+import { RegisterUserResponseDto } from './dto/register-user-response.dto';
+import type { RequestPassedValidation, RequestWithRefreshToken } from './interface/request.interface';
+import { LoginUserResponseDto } from './dto/login-user-response.dto';
+import { LocalAuthGuard } from './guard/local-auth.guard';
+import { JwtRtAuthGuard } from './guard/jwt-rt-auth.guard';
+import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { RolesGuard } from './guard/role.guard';
+import { Roles } from './decorator/user-role.decorator';
+import { Role } from 'src/user/enum/user-role.enum';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService
+  ){}
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  @Post('register')
+  async register(@Body() registerUserDto:RegisterUserRequestDto ): Promise<RegisterUserResponseDto> {
+    return await this.authService.registerUser(registerUserDto)
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
+  async login(@Req() req: RequestPassedValidation): Promise<LoginUserResponseDto>{
+    return this.authService.login(req.user)
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
+  @UseGuards(JwtRtAuthGuard)
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  async refresh(@Req() req: RequestWithRefreshToken): Promise<{ accessToken: string, refreshToken: string}>{
+    const id = req.user.id
+    const refreshToken = req.user.refreshToken
+
+    return await this.authService.refreshToken(id, refreshToken)
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @Get('test')
+  getTest(): { message: string }{
+    return {
+      message: "Test Role Guard Berhasil"
+    }
   }
 }
