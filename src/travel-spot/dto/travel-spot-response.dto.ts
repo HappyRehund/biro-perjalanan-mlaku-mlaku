@@ -5,6 +5,7 @@ export class TravelSpotResponseDto {
   id: string;
   name: string;
   description: string;
+  city: string;
   latitude: number;
   longitude: number;
   createdAt: Date;
@@ -15,6 +16,7 @@ export class TravelSpotResponseDto {
     dto.id = spot.id;
     dto.name = spot.name;
     dto.description = spot.description;
+    dto.city = spot.city;
     dto.latitude = Number(spot.latitude);
     dto.longitude = Number(spot.longitude);
     dto.createdAt = spot.createdAt;

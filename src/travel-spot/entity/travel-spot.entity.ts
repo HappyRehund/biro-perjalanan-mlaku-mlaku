@@ -1,8 +1,10 @@
 // src/travel-spot/entity/travel-spot.entity.ts
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 
 @Entity('travel_spot')
+@Index(['name', 'city'], { unique: true })
+@Index(['createdAt'])
 export class TravelSpot {
 
   @PrimaryGeneratedColumn('uuid')

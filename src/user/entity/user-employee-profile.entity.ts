@@ -1,7 +1,8 @@
 import { Column, CreateDateColumn, Entity, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { User } from "./user.entity";
 
-@Entity()
+@Entity('user_employee_profile')
+@Index(['user'])
 export class UserEmployeeProfile {
 
   @PrimaryGeneratedColumn('uuid')
@@ -43,6 +44,5 @@ export class UserEmployeeProfile {
     onDelete: 'CASCADE'
   })
   @JoinColumn({ name: 'user_id' })
-  @Index()
   user: User
 }

@@ -3,7 +3,7 @@ import { Role } from "../enum/user-role.enum";
 import { UserTouristProfile } from "./user-tourist-profle.entity";
 import { UserEmployeeProfile } from "./user-employee-profile.entity";
 
-@Entity()
+@Entity('user')
 export class User {
 
   @PrimaryGeneratedColumn('uuid')

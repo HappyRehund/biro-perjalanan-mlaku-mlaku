@@ -12,6 +12,10 @@ export class CreateTravelSpotRequestDto {
   @IsNotEmpty({ message: 'Deskripsi tidak boleh kosong' })
   description: string;
 
+  @IsString()
+  @IsNotEmpty()
+  city: string
+
   @Transform(({ value }) => parseFloat(value))
   @IsLatitude({ message: 'Latitude harus antara -90 dan 90' })
   latitude: number;
