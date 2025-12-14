@@ -16,7 +16,14 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   // USER TOURIST PROFILE MANAGEMENT
-  @Post('/profile/tourist')
+  @Get('tourist')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  async getAllTourists(): Promise<UserResponseDto[]> {
+    return this.userService.findAllTourists()
+  }
+
+  @Post('tourist')
   @UseGuards(RolesGuard)
   @Roles(Role.TOURIST)
   async createMyTouristProfile(
@@ -27,7 +34,7 @@ export class UserController {
     return await this.userService.createTouristProfile(userId, dto)
   }
 
-  @Patch('profile/tourist')
+  @Patch('tourist')
   @UseGuards(RolesGuard)
   @Roles(Role.TOURIST)
   async updateMyTouristProfile(
@@ -35,14 +42,13 @@ export class UserController {
     @Body() dto: UpdateUserTouristProfileRequestDto
   ): Promise<UserResponseDto> {
     const userId = req.user.id
-    return await this.userService.updateEmployeeProfile(userId, dto)
+    return await this.userService.updateTouristProfile(userId, dto)
   }
 
   @Get('profile')
   async getMyProfile(@Req() req: RequestWithJwtPayload): Promise<UserResponseDto> {
     const userId = req.user.id
-    const user = await this.userService.findUserById(userId)
-    return UserResponseDto.fromUser(user)
+    return await this.userService.findUserByIdWithProfile(userId)
   }
 
   // ADMIN EMPLOYEE MANAGEMENT
@@ -56,7 +62,7 @@ export class UserController {
     return await this.userService.updateEmployeeProfile(employeeId, dto)
   }
 
-  @Get('employees')
+  @Get('employee')
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   async getAllEmployees(): Promise<UserResponseDto[]> {
@@ -78,7 +84,7 @@ export class UserController {
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   async getAllUsers(): Promise<UserResponseDto[]> {
-    return this.userService.findAllEmployees()
+    return this.userService.findAllUsers()
   }
 
   @Get(':id')

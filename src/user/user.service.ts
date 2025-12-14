@@ -277,6 +277,18 @@ export class UserService {
     return user
   }
 
+  async findUserByIdWithProfile(id: string): Promise<UserResponseDto> {
+    const user = await this.userRepository.findOneOrFail({
+      where: {
+        id
+      },
+      relations: ['userTouristProfile', 'userEmployeeProfile'],
+    })
+
+
+    return UserResponseDto.fromUser(user)
+  }
+
   async findAllUsers(): Promise<UserResponseDto[]> {
     const users = await this.userRepository.find({
       relations: ['userTouristProfile', 'userEmployeeProfile'],
@@ -290,6 +302,24 @@ export class UserService {
     })
 
     return UserResponseDto.fromUsers(users)
+  }
+
+  async findAllTourists(): Promise<UserResponseDto[]> {
+    const tourists = await this.userRepository.find({
+      where: {
+        role: Role.TOURIST
+      },
+      relations: ['userTouristProfile'],
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        role: true,
+        isActive: true
+      }
+    })
+
+    return UserResponseDto.fromUsers(tourists)
   }
 
   async findAllEmployees(): Promise<UserResponseDto[]> {
