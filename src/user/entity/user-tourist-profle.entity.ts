@@ -8,11 +8,15 @@ export class UserTouristProfile {
   id: string
 
   @Column({
+    type: 'varchar',
+    length: 255,
     name: 'full_name'
   })
   fullName: string
 
   @Column({
+    type: 'varchar',
+    length: 255,
     name: 'identity_number',
   })
   identityNumber: string
@@ -23,6 +27,8 @@ export class UserTouristProfile {
   address: string
 
   @Column({
+    type: 'varchar',
+    length: 255,
     name: 'phone_number'
   })
   phoneNumber: string

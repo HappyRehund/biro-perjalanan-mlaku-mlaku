@@ -8,17 +8,23 @@ export class UserEmployeeProfile {
   id: string
 
   @Column({
+    type: 'varchar',
+    length: 255,
     name: 'full_name'
   })
   fullName: string
 
   @Column({
+    type: 'varchar',
+    length: 255,
     name: 'employee_code',
     unique: true
   })
   employeeCode: string
 
   @Column({
+    type: 'varchar',
+    length: 255,
     name: 'phone_number'
   })
   phoneNumber: string

@@ -10,16 +10,23 @@ export class User {
   id: string
 
   @Column({
+    type: 'varchar',
+    length: 255,
     unique: true
   })
   email: string
 
   @Column({
+    type: 'varchar',
+    length: 100,
     unique: true
   })
   username: string
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 255
+  })
   password: string
 
   @Column({
@@ -31,12 +38,14 @@ export class User {
 
   @Column({
     name: 'is_active',
+    type: 'boolean',
     default: true
   })
   isActive: boolean
 
   @Column({
     type: 'varchar',
+    length: 255,
     nullable: true,
     select: false
   })
