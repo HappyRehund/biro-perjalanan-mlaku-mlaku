@@ -8,18 +8,16 @@ export class ItineraryResponseDto {
   startTime: string;
   endTime: string;
   activityDetail: string;
-  travelSpot: TravelSpotResponseDto | null;
+  travelSpot: TravelSpotResponseDto;
 
   static fromItinerary(itinerary: PackageItinerary): ItineraryResponseDto {
-    const dto = new ItineraryResponseDto();
-    dto.id = itinerary.id;
-    dto.daySequence = itinerary.daySequence;
-    dto.startTime = itinerary.startTime;
-    dto.endTime = itinerary.endTime;
-    dto.activityDetail = itinerary.activityDetail;
-    dto.travelSpot = itinerary.travelSpot
-      ? TravelSpotResponseDto.fromTravelSpot(itinerary.travelSpot)
-      : null;
+    const dto = new ItineraryResponseDto()
+    dto.id = itinerary.id
+    dto.daySequence = itinerary.daySequence
+    dto.startTime = itinerary.startTime
+    dto.endTime = itinerary.endTime
+    dto.activityDetail = itinerary.activityDetail
+    dto.travelSpot = TravelSpotResponseDto.fromTravelSpot(itinerary.travelSpot)
     return dto;
   }
 
