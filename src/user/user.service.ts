@@ -5,10 +5,11 @@ import { DataSource, Repository } from 'typeorm';
 import { UserTouristProfile } from './entity/user-tourist-profle.entity';
 import { UserEmployeeProfile } from './entity/user-employee-profile.entity';
 import { CreateUserTouristProfileRequestDto } from './dto/create-user-tourist-profile-request.dto';
-import { UserEmployeeProfileResponseDto, UserTouristProfileResponseDto } from './dto/user-profile-response.dto';
 import { UpdateUserTouristProfileRequestDto } from './dto/update-user-tourist-profile-request.dto';
 import { CreateUserEmployeeProfileRequestDto } from './dto/create-user-employee-profile-request.dto';
 import { Role } from './enum/user-role.enum';
+import { UpdateUserEmployeeProfileRequestDto } from './dto/update-user-employee-profile-request.dto';
+import { UserResponseDto } from './dto/user-profile-response.dto';
 
 @Injectable()
 export class UserService {
@@ -106,7 +107,6 @@ export class UserService {
     })
   }
 
-    // UPDATE REFRESH TOKEN
   async updateUserRefreshToken(id: string, hashedRefreshToken: string){
     const user = await this.findUserById(id)
     user.hashedRefreshToken = hashedRefreshToken
@@ -114,34 +114,74 @@ export class UserService {
   }
 
   // EMPLOYEE PROFILE SERVICE - Hanya update karena craete profile sekaligus register
+  async updateEmployeeProfile(employeeUserId: string, dto: UpdateUserEmployeeProfileRequestDto): Promise<UserResponseDto> {
+    const userEmployee = await this.userRepository.findOne({
+      where: { id: employeeUserId },
+      relations: ['userEmployeeProfile']
+    })
 
+    if (!userEmployee) {
+      throw new NotFoundException('User employee tidak ditemukan')
+    }
+
+    if (userEmployee.role !== Role.EMPLOYEE) {
+      throw new ConflictException('User bukan employee');
+    }
+
+    if (!userEmployee.userEmployeeProfile) {
+      throw new NotFoundException('Employee profile tidak ditemukan');
+    }
+
+    if (dto.employeeCode) {
+      const existingEmployee = await this.userEmployeeProfileRepository.findOne({
+        where: { employeeCode: dto.employeeCode }
+      });
+
+      if (existingEmployee && existingEmployee.id !== userEmployee.userEmployeeProfile.id) {
+        throw new ConflictException(`Employee code ${dto.employeeCode} sudah digunakan`);
+      }
+    }
+
+    if (dto.fullName !== undefined) userEmployee.userEmployeeProfile.fullName = dto.fullName;
+    if (dto.employeeCode !== undefined) userEmployee.userEmployeeProfile.employeeCode = dto.employeeCode;
+    if (dto.phoneNumber !== undefined) userEmployee.userEmployeeProfile.phoneNumber = dto.phoneNumber;
+
+    const updatedUserEmployee =  await this.userRepository.save(userEmployee);
+    return UserResponseDto.fromUser(updatedUserEmployee)
+  }
 
   // TOURIST PROFILE SERVICE
-  async createTouristProfile(userId: string, dto: CreateUserTouristProfileRequestDto): Promise<UserTouristProfileResponseDto> {
-    const user = await this.userRepository.findOne({
+  async createTouristProfile(userId: string, dto: CreateUserTouristProfileRequestDto): Promise<UserResponseDto> {
+    const userTourist = await this.userRepository.findOne({
       where: { id: userId },
       relations: ['userTouristProfile']
     });
 
-    if (!user) {
+    if (!userTourist) {
       throw new NotFoundException('User tidak ditemukan');
     }
 
-    if (user.userTouristProfile) {
+    if (userTourist.role !== Role.TOURIST) {
+      throw new ConflictException('User bukan tourist');
+    }
+
+    if (userTourist.userTouristProfile) {
       throw new ConflictException('Profile tourist sudah ada');
     }
 
     const profile = this.userTouristProfileRepository.create({
       ...dto,
-      user: user
+      user: userTourist
     });
 
-    await this.userTouristProfileRepository.save(profile);
+    const savedUserTouristProfile = await this.userTouristProfileRepository.save(profile);
 
-    return UserTouristProfileResponseDto.fromUserTouristProfile(profile)
+    userTourist.userTouristProfile = savedUserTouristProfile
+
+    return UserResponseDto.fromUser(userTourist)
   }
 
-  async updateTouristProfile(userId: string, dto: UpdateUserTouristProfileRequestDto): Promise<UserTouristProfileResponseDto> {
+  async updateTouristProfile(userId: string, dto: UpdateUserTouristProfileRequestDto): Promise<UserResponseDto> {
     const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: ['userTouristProfile']
@@ -149,6 +189,10 @@ export class UserService {
 
     if (!user) {
       throw new NotFoundException('User tidak ditemukan');
+    }
+
+    if (user.role !== Role.TOURIST) {
+      throw new ConflictException('User bukan tourist');
     }
 
     if (!user.userTouristProfile) {
@@ -160,8 +204,30 @@ export class UserService {
     if (dto.address !== undefined) user.userTouristProfile.address = dto.address;
     if (dto.phoneNumber !== undefined) user.userTouristProfile.phoneNumber = dto.phoneNumber;
 
-    const updatedUser = await this.userRepository.save(user);
-    return UserTouristProfileResponseDto.fromUserTouristProfile(updatedUser.userTouristProfile)
+    const updatedUserTourist = await this.userRepository.save(user);
+    return UserResponseDto.fromUser(updatedUserTourist)
+  }
+
+  // USER STATUS UPDATE (SIAPA TAU KEPAKAI)
+  async toggleUserStatus(userId: string): Promise<UserResponseDto> {
+    const user = await this.findUserById(userId)
+    user.isActive = !user.isActive
+    const toggledUser = await this.userRepository.save(user);
+    return UserResponseDto.fromUser(toggledUser)
+  }
+
+  // DELETE
+  async deleteUser(userId: string): Promise<void> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['userTouristProfile', 'userEmployeeProfile']
+    })
+
+    if(!user){
+      throw new NotFoundException('User tidak ditemukan')
+    }
+
+    await this.userRepository.remove(user);
   }
 
   // SEMUA JENIS FIND ADA DISINI
@@ -193,6 +259,11 @@ export class UserService {
     return user
   }
 
+  async findUserByIdWithResponseDto(id: string): Promise<UserResponseDto> {
+    const user = await this.findUserById(id)
+    return UserResponseDto.fromUser(user)
+  }
+
   async findUserByEmail(email: string): Promise<User> {
     const user = await this.userRepository.findOneBy(
       {
@@ -206,5 +277,47 @@ export class UserService {
     return user
   }
 
+  async findAllUsers(): Promise<UserResponseDto[]> {
+    const users = await this.userRepository.find({
+      relations: ['userTouristProfile', 'userEmployeeProfile'],
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        role: true,
+        isActive: true
+      }
+    })
+
+    return UserResponseDto.fromUsers(users)
+  }
+
+  async findAllEmployees(): Promise<UserResponseDto[]> {
+    const employees = await this.userRepository.find({
+      where: {
+        role: Role.EMPLOYEE
+      },
+      relations: ['userEmployeeProfile'],
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        role: true,
+        isActive: true
+      }
+    })
+
+    return UserResponseDto.fromUsers(employees)
+  }
+
+  async findEmployeeById(id: string): Promise<UserResponseDto> {
+    const user = await this.findUserById(id);
+
+    if (user.role !== Role.EMPLOYEE) {
+      throw new ConflictException('User bukan employee')
+    }
+
+    return UserResponseDto.fromUser(user)
+  }
 
 }

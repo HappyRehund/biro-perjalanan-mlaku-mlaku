@@ -15,3 +15,5 @@ import { UserEmployeeProfile } from './entity/user-employee-profile.entity';
   exports: [UserService]
 })
 export class UserModule {}
+
+// Harusnya buat profile module jadi sub-module-nya si User sih, numpuk banget di service asli

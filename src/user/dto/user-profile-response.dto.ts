@@ -9,7 +9,7 @@ export class UserResponseDto {
   username: string
   role: Role
   isActive: boolean
-  profile?: UserTouristProfileResponseDto | UserEmployeeProfileResponseDto
+  profile?: UserTouristProfileDto | UserEmployeeProfileDto
 
   static fromUser(user: User): UserResponseDto {
     const dto = new UserResponseDto()
@@ -21,24 +21,28 @@ export class UserResponseDto {
     dto.isActive = user.isActive
 
     if (user.userTouristProfile){
-      dto.profile = UserTouristProfileResponseDto.fromUserTouristProfile(user.userTouristProfile)
+      dto.profile = UserTouristProfileDto.fromUserTouristProfile(user.userTouristProfile)
     } else if (user.userEmployeeProfile){
-      dto.profile = UserEmployeeProfileResponseDto.fromUserEmployeeProfile(user.userEmployeeProfile)
+      dto.profile = UserEmployeeProfileDto.fromUserEmployeeProfile(user.userEmployeeProfile)
     }
 
     return dto
   }
+
+  static fromUsers(users: User[]): UserResponseDto[] {
+    return users.map(user => UserResponseDto.fromUser(user))
+  }
 }
 
-export class UserTouristProfileResponseDto {
+export class UserTouristProfileDto {
   id: string;
   fullName: string;
   identityNumber: string;
   address: string
   phoneNumber: string;
 
-  static fromUserTouristProfile(profile: UserTouristProfile): UserTouristProfileResponseDto {
-    const dto = new UserTouristProfileResponseDto()
+  static fromUserTouristProfile(profile: UserTouristProfile): UserTouristProfileDto {
+    const dto = new UserTouristProfileDto()
     dto.id = profile.id
     dto.fullName = profile.fullName
     dto.identityNumber = profile.identityNumber
@@ -49,14 +53,14 @@ export class UserTouristProfileResponseDto {
   }
 }
 
-export class UserEmployeeProfileResponseDto {
+export class UserEmployeeProfileDto {
   id: string;
   fullName: string;
   employeeCode: string;
   phoneNumber: string;
 
-  static fromUserEmployeeProfile(profile: UserEmployeeProfile): UserEmployeeProfileResponseDto {
-    const dto = new UserEmployeeProfileResponseDto()
+  static fromUserEmployeeProfile(profile: UserEmployeeProfile): UserEmployeeProfileDto {
+    const dto = new UserEmployeeProfileDto()
     dto.id = profile.id
     dto.fullName = profile.fullName
     dto.employeeCode = profile.employeeCode
