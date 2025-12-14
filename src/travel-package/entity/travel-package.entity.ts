@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { PackageItinerary } from "./package-intinerary.entity";
+import { PackageItinerary } from "./package-itinerary.entity";
 
 @Entity('travel_package')
 @Index(['createdAt'])

@@ -4,7 +4,7 @@ import { TravelSpot } from "src/travel-spot/entity/travel-spot.entity";
 
 @Entity('package-itinerary')
 @Index(['travelPackage'])
-@Index(['spot'])
+@Index(['travelSpot'])
 @Index(['travelPackage', 'daySequence'])
 export class PackageItinerary {
 

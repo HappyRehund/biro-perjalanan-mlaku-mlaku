@@ -1,5 +1,5 @@
 // src/travel-spot/entity/travel-spot.entity.ts
-import { PackageItinerary } from "src/travel-package/entity/package-intinerary.entity";
+import { PackageItinerary } from "src/travel-package/entity/package-itinerary.entity";
 import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 
