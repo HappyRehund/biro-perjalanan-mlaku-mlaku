@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Role } from "../enum/user-role.enum";
 import { UserTouristProfile } from "./user-tourist-profle.entity";
 import { UserEmployeeProfile } from "./user-employee-profile.entity";
+import { TravelTrip } from "src/travel-trip/entity/travel-trip.entity";
 
 @Entity('user')
 export class User {
@@ -71,5 +72,11 @@ export class User {
     cascade: ['update','remove']
   })
   userEmployeeProfile: UserEmployeeProfile
+
+  @OneToMany(() => TravelTrip, (trip) => trip.userTourist)
+  tripsAsTourist: TravelTrip[]
+
+  @OneToMany(() => TravelTrip, (trip) => trip.userEmployee)
+  tripsAsEmployee: TravelTrip[]
 
 }

@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { PackageItinerary } from "./package-itinerary.entity";
+import { TravelTrip } from "src/travel-trip/entity/travel-trip.entity";
 
 @Entity('travel_package')
 @Index(['createdAt'])
@@ -64,4 +65,7 @@ export class TravelPackage {
     cascade: ['insert', 'update', 'remove']
   })
   itineraries: PackageItinerary[]
+
+  @OneToMany(() => TravelTrip, (trip) => trip.travelPackage )
+  trips: TravelTrip[]
 }

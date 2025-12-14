@@ -13,5 +13,6 @@ import { TravelSpotModule } from 'src/travel-spot/travel-spot.module';
   ],
   controllers: [TravelPackageController],
   providers: [TravelPackageService],
+  exports: [TravelPackageService]
 })
 export class TravelPackageModule {}
