@@ -1,14 +1,11 @@
 import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
-import { LocalStrategyValidatedResponseDto } from './dto/local-strategy-validated-response.dto';
+import { LocalStrategyValidatedResponseDto, LoginUserResponseDto, RegisterUserResponseDto } from './dto/auth-user-response.dto';
 import { RegisterUserRequestDto } from './dto/register-user-request.dto';
-import { RegisterUserResponseDto } from './dto/register-user-response.dto';
 import * as bcrypt from "bcrypt"
 import { Role } from 'src/user/enum/user-role.enum';
-import { LoginUserResponseDto } from './dto/login-user-response.dto';
 import { JwtPayloadData } from './interface/jwt-payload.interface';
-import { jwtConstants } from './constant/auth.constant';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { LocalStrategyValidatedResponseDto } from '../dto/local-strategy-validated-response.dto';
+import { LocalStrategyValidatedResponseDto } from '../dto/auth-user-response.dto';
 import { JwtPayloadData } from './jwt-payload.interface';
 
 // endpoint yang pakai LocalAuthGuard (login)

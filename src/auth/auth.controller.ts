@@ -1,9 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterUserRequestDto } from './dto/register-user-request.dto';
-import { RegisterUserResponseDto } from './dto/register-user-response.dto';
+import { RegisterUserResponseDto, LoginUserResponseDto } from './dto/auth-user-response.dto';
 import type { RequestPassedValidation, RequestWithRefreshToken } from './interface/request.interface';
-import { LoginUserResponseDto } from './dto/login-user-response.dto';
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { JwtRtAuthGuard } from './guard/jwt-rt-auth.guard';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
