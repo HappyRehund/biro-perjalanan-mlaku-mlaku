@@ -36,7 +36,7 @@ export class TravelTrip {
   readonly createdAt: Date
 
   @UpdateDateColumn({
-    name: 'update_at'
+    name: 'updated_at'
   })
   readonly updatedAt: Date
 
@@ -44,7 +44,7 @@ export class TravelTrip {
     onDelete: 'RESTRICT',
     nullable: false
   })
-  @JoinColumn({ name: 'user_tourist_id '})
+  @JoinColumn({ name: 'user_tourist_id'})
   userTourist: User
 
   @ManyToOne(() => User, {
