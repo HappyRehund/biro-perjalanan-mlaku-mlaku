@@ -9,8 +9,6 @@ export class ItineraryResponseDto {
   endTime: string;
   activityDetail: string;
   travelSpot: TravelSpotResponseDto | null;
-  createdAt: Date;
-  updatedAt: Date;
 
   static fromItinerary(itinerary: PackageItinerary): ItineraryResponseDto {
     const dto = new ItineraryResponseDto();
@@ -22,8 +20,6 @@ export class ItineraryResponseDto {
     dto.travelSpot = itinerary.travelSpot
       ? TravelSpotResponseDto.fromTravelSpot(itinerary.travelSpot)
       : null;
-    dto.createdAt = itinerary.createdAt;
-    dto.updatedAt = itinerary.updatedAt;
     return dto;
   }
 

@@ -1,6 +1,6 @@
 // src/travel-package/dto/create-travel-package.dto.ts
 import { Type } from 'class-transformer';
-import { ArrayMinSize, IsArray, IsDecimal, IsInt, IsNotEmpty, IsOptional, IsString, MaxLength, Min, ValidateNested } from 'class-validator';
+import { ArrayMinSize, IsArray, IsDecimal, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, Min, ValidateNested } from 'class-validator';
 import { CreateItineraryRequestDto } from './create-itinerary-request.dto';
 
 export class CreateTravelPackageRequestDto {
@@ -29,7 +29,7 @@ export class CreateTravelPackageRequestDto {
   city: string;
 
   @Type(() => Number)
-  @IsDecimal({ decimal_digits: '2' })
+  @IsNumber({maxDecimalPlaces: 2})
   @Min(0)
   basePrice: number;
 
