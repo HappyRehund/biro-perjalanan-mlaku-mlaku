@@ -1,4 +1,3 @@
-
 import { TravelSpotService } from './travel-spot.service';
 import { CreateTravelSpotRequestDto } from './dto/create-travel-spot-request.dto';
 import { UpdateTravelSpotRequestDto } from './dto/update-travel-spot-request.dto';
@@ -7,9 +6,9 @@ import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guard/role.guard';
 import { Roles } from 'src/auth/decorator/user-role.decorator';
 import { Role } from 'src/user/enum/user-role.enum';
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 
-@Controller('travel-spots')
+@Controller('travel-spot')
 @UseGuards(JwtAuthGuard)
 export class TravelSpotController {
   constructor(private readonly travelSpotService: TravelSpotService) {}
@@ -32,6 +31,9 @@ export class TravelSpotController {
   async search(
     @Query('q') searchTerm: string
   ): Promise<TravelSpotResponseDto[]> {
+    if (!searchTerm || searchTerm.trim() === '') {
+      throw new BadRequestException('Search term tidak boleh kosong');
+    }
     return await this.travelSpotService.searchTravelSpots(searchTerm);
   }
 
@@ -39,12 +41,10 @@ export class TravelSpotController {
   async findByCity(
     @Param('city') city: string
   ): Promise<TravelSpotResponseDto[]> {
+    if (!city || city.trim() === '') {
+      throw new BadRequestException('City tidak boleh kosong');
+    }
     return await this.travelSpotService.findTravelSpotsByCity(city);
-  }
-
-  @Get(':id')
-  async findOne(@Param('id') id: string): Promise<TravelSpotResponseDto> {
-    return await this.travelSpotService.findTravelSpotById(id);
   }
 
   @Patch(':id')

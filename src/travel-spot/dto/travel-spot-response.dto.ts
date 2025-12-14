@@ -8,8 +8,6 @@ export class TravelSpotResponseDto {
   city: string;
   latitude: number;
   longitude: number;
-  createdAt: Date;
-  updatedAt: Date;
 
   static fromTravelSpot(spot: TravelSpot): TravelSpotResponseDto {
     const dto = new TravelSpotResponseDto();
@@ -19,8 +17,6 @@ export class TravelSpotResponseDto {
     dto.city = spot.city;
     dto.latitude = Number(spot.latitude);
     dto.longitude = Number(spot.longitude);
-    dto.createdAt = spot.createdAt;
-    dto.updatedAt = spot.updatedAt;
     return dto;
   }
 

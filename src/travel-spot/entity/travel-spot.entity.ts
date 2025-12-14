@@ -1,5 +1,6 @@
 // src/travel-spot/entity/travel-spot.entity.ts
-import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { PackageItinerary } from "src/travel-package/entity/package-intinerary.entity";
+import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 
 @Entity('travel_spot')
@@ -50,5 +51,8 @@ export class TravelSpot {
     name: 'updated_at'
   })
   readonly updatedAt: Date;
+
+  @OneToMany(() => PackageItinerary, (itinerary) => itinerary.travelSpot)
+  itineraries: PackageItinerary[];
 
 }
