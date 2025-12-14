@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/c
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { LocalStrategyValidatedResponseDto, LoginUserResponseDto, RegisterUserResponseDto } from './dto/auth-user-response.dto';
-import { RegisterUserRequestDto } from './dto/register-user-request.dto';
+import { RegisterUserEmployeeRequestDto, RegisterUserTouristRequestDto } from './dto/register-user-request.dto';
 import * as bcrypt from "bcrypt"
 import { Role } from 'src/user/enum/user-role.enum';
 import { JwtPayloadData } from './interface/jwt-payload.interface';
@@ -17,15 +17,28 @@ export class AuthService {
     private readonly configService: ConfigService
   ){}
 
-  async registerUser(registerUserDto: RegisterUserRequestDto): Promise<RegisterUserResponseDto> {
-    const hashedPassword = await bcrypt.hash(registerUserDto.password, 10)
-    const newUser = await this.userService.createUser({
-      email: registerUserDto.email,
-      username: registerUserDto.username,
+  async registerUserTourist(registerUserTouristDto: RegisterUserTouristRequestDto): Promise<RegisterUserResponseDto> {
+    const hashedPassword = await bcrypt.hash(registerUserTouristDto.password, 10)
+    const newTouristUser = await this.userService.createTouristUser({
+      email: registerUserTouristDto.email,
+      username: registerUserTouristDto.username,
       password: hashedPassword
     })
 
-    return RegisterUserResponseDto.fromUser(newUser)
+    return RegisterUserResponseDto.fromUser(newTouristUser)
+  }
+
+  async registerUserEmployee(registerUserEmployeeDto: RegisterUserEmployeeRequestDto): Promise<RegisterUserResponseDto> {
+    const hashedPassword = await bcrypt.hash(registerUserEmployeeDto.password, 10)
+
+    const newUserEmployee = await this.userService.createEmployeeUserWithProfile({
+      email: registerUserEmployeeDto.email,
+      username: registerUserEmployeeDto.username,
+      password: hashedPassword,
+      employeeProfile: registerUserEmployeeDto.profile
+    })
+
+    return RegisterUserResponseDto.fromUser(newUserEmployee)
   }
 
   async validateUser(email: string, password: string): Promise<LocalStrategyValidatedResponseDto> {

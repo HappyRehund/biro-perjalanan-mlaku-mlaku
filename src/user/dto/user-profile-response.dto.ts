@@ -21,9 +21,9 @@ export class UserResponseDto {
     dto.isActive = user.isActive
 
     if (user.userTouristProfile){
-      dto.profile = UserTouristProfileResponseDto.fromEntity(user.userTouristProfile)
+      dto.profile = UserTouristProfileResponseDto.fromUserTouristProfile(user.userTouristProfile)
     } else if (user.userEmployeeProfile){
-      dto.profile = UserEmployeeProfileResponseDto.fromEntity(user.userEmployeeProfile)
+      dto.profile = UserEmployeeProfileResponseDto.fromUserEmployeeProfile(user.userEmployeeProfile)
     }
 
     return dto
@@ -37,7 +37,7 @@ export class UserTouristProfileResponseDto {
   address: string
   phoneNumber: string;
 
-  static fromEntity(profile: UserTouristProfile): UserTouristProfileResponseDto {
+  static fromUserTouristProfile(profile: UserTouristProfile): UserTouristProfileResponseDto {
     const dto = new UserTouristProfileResponseDto()
     dto.id = profile.id
     dto.fullName = profile.fullName
@@ -55,7 +55,7 @@ export class UserEmployeeProfileResponseDto {
   employeeCode: string;
   phoneNumber: string;
 
-  static fromEntity(profile: UserEmployeeProfile): UserEmployeeProfileResponseDto {
+  static fromUserEmployeeProfile(profile: UserEmployeeProfile): UserEmployeeProfileResponseDto {
     const dto = new UserEmployeeProfileResponseDto()
     dto.id = profile.id
     dto.fullName = profile.fullName

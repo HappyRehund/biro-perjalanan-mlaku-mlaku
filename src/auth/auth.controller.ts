@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Req, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { RegisterUserRequestDto } from './dto/register-user-request.dto';
+import { RegisterUserEmployeeRequestDto, RegisterUserTouristRequestDto } from './dto/register-user-request.dto';
 import { RegisterUserResponseDto, LoginUserResponseDto } from './dto/auth-user-response.dto';
 import type { RequestPassedValidation, RequestWithRefreshToken } from './interface/request.interface';
 import { LocalAuthGuard } from './guard/local-auth.guard';
@@ -17,8 +17,15 @@ export class AuthController {
   ){}
 
   @Post('register')
-  async register(@Body() registerUserDto:RegisterUserRequestDto ): Promise<RegisterUserResponseDto> {
-    return await this.authService.registerUser(registerUserDto)
+  async registerTourist(@Body() registerUserTouristDto: RegisterUserTouristRequestDto ): Promise<RegisterUserResponseDto> {
+    return await this.authService.registerUserTourist(registerUserTouristDto)
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @Post('admin/register-employee')
+  async registerEmployee(@Body() registerUserEmployeeDto: RegisterUserEmployeeRequestDto): Promise<RegisterUserResponseDto> {
+    return await this.authService.registerUserEmployee(registerUserEmployeeDto)
   }
 
   @UseGuards(LocalAuthGuard)
