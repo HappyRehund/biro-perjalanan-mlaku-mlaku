@@ -20,6 +20,12 @@ export class TravelSpot {
   description: string;
 
   @Column({
+    type: 'varchar',
+    length: 100
+  })
+  city: string
+
+  @Column({
     type: 'decimal',
     precision: 10,
     scale: 7
