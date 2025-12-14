@@ -1,7 +1,7 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TravelSpot } from './entity/travel-spot.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateTravelSpotRequestDto } from './dto/create-travel-spot-request.dto';
 import { TravelSpotResponseDto } from './dto/travel-spot-response.dto';
 import { UpdateTravelSpotRequestDto } from './dto/update-travel-spot-request.dto';
@@ -43,19 +43,7 @@ export class TravelSpotService {
     return TravelSpotResponseDto.fromTravelSpots(travelSpots);
   }
 
-  async findTravelSpotById(id: string): Promise<TravelSpotResponseDto> {
-    const travelSpot = await this.travelSpotRepository.findOne({
-      where: { id }
-    });
-
-    if (!travelSpot) {
-      throw new NotFoundException(`Travel spot dengan id ${id} tidak ditemukan`);
-    }
-
-    return TravelSpotResponseDto.fromTravelSpot(travelSpot);
-  }
-
-  async getTravelSpotEntity(id: string): Promise<TravelSpot> {
+  async findTravelSpotById(id: string): Promise<TravelSpot> {
     const travelSpot = await this.travelSpotRepository.findOne({
       where: { id }
     });
@@ -67,8 +55,16 @@ export class TravelSpotService {
     return travelSpot;
   }
 
+  async getTravelSpotEntities(ids: string[]): Promise<TravelSpot[]> {
+    return await this.travelSpotRepository.find({
+      where: {
+        id: In(ids)
+      }
+    })
+  }
+
   async updateTravelSpot(id: string, dto: UpdateTravelSpotRequestDto): Promise<TravelSpotResponseDto> {
-    const travelSpot = await this.getTravelSpotEntity(id);
+    const travelSpot = await this.findTravelSpotById(id);
 
     if ((dto.name && dto.name !== travelSpot.name) || (dto.city && dto.city !== travelSpot.city)) {
       const checkName = dto.name || travelSpot.name;
@@ -100,7 +96,7 @@ export class TravelSpotService {
   }
 
   async deleteTravelSpot(id: string): Promise<void> {
-    const travelSpot = await this.getTravelSpotEntity(id);
+    const travelSpot = await this.findTravelSpotById(id);
     await this.travelSpotRepository.remove(travelSpot);
   }
 

@@ -5,7 +5,7 @@ import { IsInt, IsNotEmpty, IsString, IsUUID, Matches, Min } from 'class-validat
 export class CreateItineraryRequestDto {
   @IsUUID()
   @IsNotEmpty()
-  spotId: string;
+  travelSpotId: string;
 
   @IsInt()
   @Min(1)
