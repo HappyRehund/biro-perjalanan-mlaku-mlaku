@@ -9,7 +9,9 @@ import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { RolesGuard } from './guard/role.guard';
 import { Roles } from './decorator/user-role.decorator';
 import { Role } from 'src/user/enum/user-role.enum';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -24,6 +26,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Post('admin/register-employee')
+  @ApiBearerAuth('JWT-auth')
   async registerEmployee(@Body() registerUserEmployeeDto: RegisterUserEmployeeRequestDto): Promise<RegisterUserResponseDto> {
     return await this.authService.registerUserEmployee(registerUserEmployeeDto)
   }

@@ -11,8 +11,11 @@ import { RolesGuard } from 'src/auth/guard/role.guard';
 import { Roles } from 'src/auth/decorator/user-role.decorator';
 import { Role } from 'src/user/enum/user-role.enum';
 import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, HttpStatus, Param, ParseBoolPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('travel-packages')
 @Controller('travel-package')
+@ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
 export class TravelPackageController {
   constructor(private readonly travelPackageService: TravelPackageService) {}

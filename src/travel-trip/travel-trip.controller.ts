@@ -1,17 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-  HttpCode,
-  HttpStatus,
-  Req,
-  ParseUUIDPipe
-} from '@nestjs/common';
+
 import { TravelTripService } from './travel-trip.service';
 import { CreateTravelTripRequestDto } from './dto/create-travel-trip-request.dto';
 import { UpdateTravelTripRequestDto } from './dto/update-travel-trip-request.dto';
@@ -21,8 +8,12 @@ import { RolesGuard } from 'src/auth/guard/role.guard';
 import { Roles } from 'src/auth/decorator/user-role.decorator';
 import { Role } from 'src/user/enum/user-role.enum';
 import type { RequestWithJwtPayload } from 'src/auth/interface/request.interface';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('travel-trips')
 @Controller('travel-trip')
+@ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
 export class TravelTripController {
   constructor(private readonly travelTripService: TravelTripService) {}
