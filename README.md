@@ -1,62 +1,325 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Biro Perjalanan Mlaku-Mlaku API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+RESTful API untuk sistem manajemen biro perjalanan yang dibangun dengan NestJS, TypeORM, dan PostgreSQL.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Live Demo
 
-## Description
+**API Base URL**: https://biro-perjalanan-mlaku-mlaku-production.up.railway.app/api/v1
 
-SEDANG DIBUAT - BY REHUND
+**Swagger Documentation**: https://biro-perjalanan-mlaku-mlaku-production.up.railway.app/api
 
-## Project setup
+## 📋 Test Accounts
 
-```bash
-$ npm install
+Gunakan akun berikut untuk menguji endpoint:
+
+| Role | Email | Password |
+|------|-------|----------|
+| **Admin** | rayhan-admin@gmail.com | Admin@123 |
+| **Employee** | amalia-employee@mlakumlaku.com | Employee@123 |
+| **Tourist** | yasmin-tourist@gmail.com | Tourist@123 |
+
+## 📁 Project Structure
+
+```
+biro-perjalanan-mlaku-mlaku/
+├── src/
+│   ├── auth/                      # Authentication & Authorization Module
+│   │   ├── constant/
+│   │   ├── decorator/
+│   │   ├── dto/
+│   │   ├── guard/
+│   │   ├── interface/
+│   │   ├── strategy/
+│   │   ├── auth.controller.ts
+│   │   ├── auth.module.ts
+│   │   └── auth.service.ts
+│   ├── user/                      # User Management Module
+│   │   ├── dto/
+│   │   ├── entity/
+│   │   ├── enum/
+│   │   ├── user.controller.ts
+│   │   ├── user.module.ts
+│   │   └── user.service.ts
+│   ├── travel-spot/               # Travel Destination Module
+│   │   ├── dto/
+│   │   ├── entity/
+│   │   ├── travel-spot.controller.ts
+│   │   ├── travel-spot.module.ts
+│   │   └── travel-spot.service.ts
+│   ├── travel-package/            # Travel Package Module
+│   │   ├── dto/
+│   │   ├── entity/
+│   │   ├── travel-package.controller.ts
+│   │   ├── travel-package.module.ts
+│   │   └── travel-package.service.ts
+│   ├── travel-trip/               # Trip Booking Module
+│   │   ├── dto/
+│   │   ├── entity/
+│   │   ├── travel-trip.controller.ts
+│   │   ├── travel-trip.module.ts
+│   │   └── travel-trip.service.ts
+│   ├── config/                    # Configuration Files
+│   │   └── database.config.ts
+│   ├── migration/                 # Database Migrations
+│   ├── common/                    # Shared Resources
+│   ├── app.module.ts
+│   └── main.ts
+├── test/                          # E2E Tests
+├── typeorm.config.ts              # TypeORM Configuration
+├── nest-cli.json
+├── package.json
+├── tsconfig.json
+└── README.md
 ```
 
-## Compile and run the project
+## 🔌 API Endpoints
+
+### 🔐 Auth Module
+**Base Path**: `/api/v1/auth`
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/register` | Register new tourist account | Public |
+| POST | `/admin/register-employee` | Register employee account | Admin |
+| POST | `/login` | Login | Public |
+| POST | `/refresh` | Refresh access token | JWT |
+| GET | `/test` | Test authentication | JWT |
+
+### 👥 User Module
+**Base Path**: `/api/v1/user`
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/tourist` | Get all tourists | Admin/Employee |
+| POST | `/tourist` | Create tourist profile | Tourist |
+| PATCH | `/tourist` | Update tourist profile | Tourist |
+| GET | `/profile` | Get my profile | JWT |
+| PATCH | `/employee/{id}/profile` | Update employee profile | Admin/Employee |
+| GET | `/employee` | Get all employees | Admin |
+| GET | `/employee/{id}` | Get employee by ID | Admin |
+| GET | `/` | Get all users | Admin |
+| GET | `/{id}` | Get user by ID | Admin |
+| DELETE | `/{id}` | Delete user | Admin |
+| PATCH | `/{id}/toggle-status` | Toggle user active status | Admin |
+
+### 🏖️ Travel Spot Module
+**Base Path**: `/api/v1/travel-spot`
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/` | Create travel spot | Admin/Employee |
+| GET | `/` | Get all travel spots | JWT |
+| GET | `/search` | Search travel spots | JWT |
+| GET | `/city/{city}` | Get spots by city | JWT |
+| PATCH | `/{id}` | Update travel spot | Admin/Employee |
+| DELETE | `/{id}` | Delete travel spot | Admin/Employee |
+
+### 📦 Travel Package Module
+**Base Path**: `/api/v1/travel-package`
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/` | Create travel package | Admin/Employee |
+| GET | `/` | Get all packages | JWT |
+| GET | `/{id}` | Get package by ID | JWT |
+| PATCH | `/{id}` | Update package | Admin/Employee |
+| DELETE | `/{id}` | Delete package | Admin/Employee |
+| POST | `/{packageId}/itinerary` | Create itinerary | Admin/Employee |
+| GET | `/{packageId}/itinerary` | Get package itineraries | JWT |
+| GET | `/{packageId}/itinerary/{itineraryId}` | Get itinerary by ID | JWT |
+| PATCH | `/{packageId}/itinerary/{itineraryId}` | Update itinerary | Admin/Employee |
+| DELETE | `/{packageId}/itinerary/{itineraryId}` | Delete itinerary | Admin/Employee |
+
+### 🎫 Travel Trip Module
+**Base Path**: `/api/v1/travel-trip`
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/` | Create trip booking | Tourist |
+| GET | `/` | Get all trips | Admin/Employee |
+| GET | `/upcoming` | Get upcoming trips | JWT |
+| GET | `/ongoing` | Get ongoing trips | JWT |
+| GET | `/completed` | Get completed trips | JWT |
+| GET | `/my-trips` | Get my trips | Tourist |
+| GET | `/my-assignments` | Get my assignments | Employee |
+| GET | `/tourist/{touristId}` | Get trips by tourist | Admin/Employee |
+| GET | `/employee/{employeeId}` | Get trips by employee | Admin/Employee |
+| GET | `/package/{packageId}` | Get trips by package | Admin/Employee |
+| GET | `/{id}` | Get trip by ID | JWT |
+| PATCH | `/{id}` | Update trip | Admin/Employee |
+| DELETE | `/{id}` | Delete trip | Admin |
+
+## 🛠️ Local Development Setup with Docker
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- Docker & Docker Compose
+- Git
+
+### Step 1: Clone Repository
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone https://github.com/HappyRehund/biro-perjalanan-mlaku-mlaku.git
+cd biro-perjalanan-mlaku-mlaku
 ```
 
-## Run tests
+### Step 2: Install Dependencies
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
+### Step 3: Setup Docker PostgreSQL
+
+Create `docker-compose.yml` file:
+
+```yaml
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: biro_perjalanan_db
+    restart: always
+    environment:
+      POSTGRES_DB: biro_perjalanan
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: rayhankaya123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+```
+
+Start PostgreSQL container:
+
+```bash
+docker-compose up -d
+```
+
+Verify container is running:
+
+```bash
+docker ps
+```
+
+### Step 4: Setup Environment Variables
+
+Create `.env` file in root directory:
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=biro_perjalanan
+DB_USER=user
+DB_PASSWORD=rayhankaya123
+
+JWT_ACCESS_SECRET=jwtsecretmilikarticleweb
+JWT_ACCESS_EXPIRATION=1d
+
+JWT_REFRESH_SECRET=jwtrefreshmilikarticleweb
+JWT_REFRESH_EXPIRATION=7d
+```
+
+### Step 5: Run Database Migrations
+
+```bash
+npm run migration:run
+```
+
+### Step 6: Start Development Server
+
+```bash
+npm run start:dev
+```
+
+API will be available at:
+- **API**: http://localhost:3000/api/v1
+- **Swagger**: http://localhost:3000/api
+
+## 📜 Available Scripts
+
+### Development
+
+```bash
+# Start development server with hot-reload
+npm run start:dev
+
+# Start with debugging
+npm run start:debug
+
+# Format code
+npm run format
+
+# Lint code
+npm run lint
+```
+
+### Build & Production
+
+```bash
+# Build for production
+npm run build
+
+# Start production server
+npm run start:prod
+```
+
+### Testing
+
+```bash
+# Run unit tests
+npm run test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run e2e tests
+npm run test:e2e
+
+# Generate test coverage
+npm run test:cov
+```
+
+## Deployment
+
+When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+
+If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+
+```bash
+$ npm install -g @nestjs/mau
+$ mau deploy
+```
+
+With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+
+## Resources
+
+Check out a few resources that may come in handy when working with NestJS:
+
+- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
+- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
+- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
+- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
+- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
+- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
+- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
+- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+
+## Support
+
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+
+## Stay in touch
+
+- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
