@@ -12,5 +12,8 @@ export default new DataSource({
   database: process.env.DB_NAME,
   synchronize: false,
   entities: ['dist/**/entity/*.entity{.ts,.js}'],
-  migrations: ['dist/src/migration/*{.ts,.js}']
+  migrations: ['dist/src/migration/*{.ts,.js}'],
+
+  url: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
 })
