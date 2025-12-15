@@ -1,5 +1,5 @@
+import { PartialType } from "@nestjs/swagger"; // ← PENTING: Ganti dari @nestjs/mapped-types
 import { CreateUserEmployeeProfileRequestDto } from "./create-user-employee-profile-request.dto";
-import { PartialType } from "@nestjs/mapped-types";
 
 export class UpdateUserEmployeeProfileRequestDto extends PartialType(CreateUserEmployeeProfileRequestDto) {
 }

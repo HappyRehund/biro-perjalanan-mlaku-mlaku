@@ -9,7 +9,7 @@ import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { RolesGuard } from './guard/role.guard';
 import { Roles } from './decorator/user-role.decorator';
 import { Role } from 'src/user/enum/user-role.enum';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -31,14 +31,43 @@ export class AuthController {
     return await this.authService.registerUserEmployee(registerUserEmployeeDto)
   }
 
-  @UseGuards(LocalAuthGuard)
   @Post('login')
+  @UseGuards(LocalAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    description: 'Authenticate user with email and password. Returns access token and refresh token.'
+  })
+  @ApiBody({
+    description: 'User credentials',
+    schema: {
+      type: 'object',
+      required: ['email', 'password'],
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'tourist@gmail.com',
+          description: 'User email address'
+        },
+        password: {
+          type: 'string',
+          example: 'Tourist@123',
+          description: 'User password',
+          minLength: 8
+        }
+      }
+    }
+  })
   async login(@Req() req: RequestPassedValidation): Promise<LoginUserResponseDto>{
     return this.authService.login(req.user)
   }
 
   @UseGuards(JwtRtAuthGuard)
   @Post('refresh')
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({
+    description: 'Get new access token using refresh token -> Put Refresh Token (Not Access Token) in the Authorization header'
+  })
   @HttpCode(HttpStatus.OK)
   async refresh(@Req() req: RequestWithRefreshToken): Promise<{ accessToken: string, refreshToken: string}>{
     const id = req.user.id

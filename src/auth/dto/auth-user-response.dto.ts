@@ -1,11 +1,37 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { User } from "src/user/entity/user.entity"
 import { Role } from "src/user/enum/user-role.enum"
 
 export class LocalStrategyValidatedResponseDto {
+  @ApiProperty({
+    description: 'User unique identifier',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
   id: string
+
+  @ApiProperty({
+    description: 'Username',
+    example: 'johndoe',
+  })
   username: string
+
+  @ApiProperty({
+    description: 'User email address',
+    example: 'tourist@gmail.com',
+  })
   email: string
+
+  @ApiProperty({
+    description: 'User role',
+    enum: Role,
+    example: Role.TOURIST,
+  })
   role: Role
+
+  @ApiProperty({
+    description: 'Account active status',
+    example: true,
+  })
   isActive: boolean
 
   static fromUser(user: User): LocalStrategyValidatedResponseDto {
@@ -22,11 +48,40 @@ export class LocalStrategyValidatedResponseDto {
 }
 
 export class LoginUserResponseDto {
+  @ApiProperty({
+    description: 'Username',
+    example: 'johndoe',
+  })
   username: string
+
+  @ApiProperty({
+    description: 'User email address',
+    example: 'tourist@gmail.com',
+  })
   email: string
+
+  @ApiProperty({
+    description: 'JWT access token (valid for 15 minutes)',
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+  })
   accessToken: string
+
+  @ApiProperty({
+    description: 'JWT refresh token (valid for 7 days)',
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+  })
   refreshToken: string
+
+  @ApiProperty({
+    description: 'Account active status',
+    example: true,
+  })
   isActive: boolean
+
+  @ApiProperty({
+    description: 'Success message',
+    example: 'user with email tourist@gmail.com successfully logged in',
+  })
   message: string
 
   static fromValidateLocalStrategyAndTokens(
@@ -47,10 +102,23 @@ export class LoginUserResponseDto {
   }
 }
 
-
 export class RegisterUserResponseDto {
+  @ApiProperty({
+    description: 'Username',
+    example: 'johndoe',
+  })
   username: string
+
+  @ApiProperty({
+    description: 'User email address',
+    example: 'tourist@gmail.com',
+  })
   email: string
+
+  @ApiProperty({
+    description: 'Success message',
+    example: 'User with email tourist@gmail.com and username johndoe successfully created',
+  })
   message: string
 
   static fromUser(user: User): RegisterUserResponseDto {
