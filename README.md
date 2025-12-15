@@ -268,19 +268,3 @@ npm run build
 # Start production server
 npm run start:prod
 ```
-
-### Testing
-
-```bash
-# Run unit tests
-npm run test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Run e2e tests
-npm run test:e2e
-
-# Generate test coverage
-npm run test:cov
-```
