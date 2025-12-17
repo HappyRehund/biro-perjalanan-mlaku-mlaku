@@ -8,6 +8,8 @@ RESTful API untuk sistem manajemen biro perjalanan yang dibangun dengan NestJS, 
 
 **Swagger Documentation**: https://biro-perjalanan-mlaku-mlaku-production.up.railway.app/api
 
+**Bruno Documentation**: https://github.com/HappyRehund/biro-perjalanan-mlaku-mlaku-bruno-api-documentation.git
+
 ## 📋 Test Accounts
 
 Gunakan akun berikut untuk menguji endpoint:
