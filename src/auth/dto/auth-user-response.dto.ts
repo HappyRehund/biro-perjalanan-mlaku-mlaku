@@ -49,6 +49,12 @@ export class LocalStrategyValidatedResponseDto {
 
 export class LoginUserResponseDto {
   @ApiProperty({
+    description: 'User unique identifier',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  id: string
+
+  @ApiProperty({
     description: 'Username',
     example: 'johndoe',
   })
@@ -92,6 +98,7 @@ export class LoginUserResponseDto {
 
     const dto = new LoginUserResponseDto()
 
+    dto.id = user.id
     dto.username = user.username
     dto.email = user.email
     dto.accessToken = accessToken
@@ -103,6 +110,13 @@ export class LoginUserResponseDto {
 }
 
 export class RegisterUserResponseDto {
+
+  @ApiProperty({
+    description: 'User unique identifier',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  id: string
+
   @ApiProperty({
     description: 'Username',
     example: 'johndoe',
@@ -123,6 +137,8 @@ export class RegisterUserResponseDto {
 
   static fromUser(user: User): RegisterUserResponseDto {
     const dto = new RegisterUserResponseDto();
+
+    dto.id = user.id
     dto.username = user.username
     dto.email = user.email
     dto.message = `User with email ${user.email} and username ${user.username} successfully created`

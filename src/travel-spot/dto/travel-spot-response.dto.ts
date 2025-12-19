@@ -42,12 +42,14 @@ export class TravelSpotResponseDto {
 
   static fromTravelSpot(spot: TravelSpot): TravelSpotResponseDto {
     const dto = new TravelSpotResponseDto();
+
     dto.id = spot.id;
     dto.name = spot.name;
     dto.description = spot.description;
     dto.city = spot.city;
     dto.latitude = Number(spot.latitude);
     dto.longitude = Number(spot.longitude);
+
     return dto;
   }
 

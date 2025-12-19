@@ -63,6 +63,7 @@ export class TravelPackageResponseDto {
   ): TravelPackageResponseDto {
     const dto = new TravelPackageResponseDto();
     dto.id = travelPackage.id;
+
     dto.name = travelPackage.name;
     dto.description = travelPackage.description;
     dto.country = travelPackage.country;
