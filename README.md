@@ -4,25 +4,29 @@ RESTful API untuk sistem manajemen biro perjalanan yang dibangun dengan NestJS, 
 
 ## 🚀 Live Demo
 
-**API Base URL**: https://biro-perjalanan-mlaku-mlaku-production.up.railway.app/api/v1
+**API Base URL**: <https://biro-perjalanan-mlaku-mlaku-production.up.railway.app/api/v1>
 
-**Swagger Documentation**: https://biro-perjalanan-mlaku-mlaku-production.up.railway.app/api
+**Swagger Documentation**: <https://biro-perjalanan-mlaku-mlaku-production.up.railway.app/api>
 
-**Bruno Documentation**: https://github.com/HappyRehund/biro-perjalanan-mlaku-mlaku-bruno-api-documentation.git
+**Bruno Documentation**: <https://github.com/HappyRehund/biro-perjalanan-mlaku-mlaku-bruno-api-documentation.git>
+
+## 📊 Entity Relationship Diagram
+
+![Entity Relationship Diagram](docs/images/diagram-erd.png)
 
 ## 📋 Test Accounts
 
 Gunakan akun berikut untuk menguji endpoint:
 
 | Role | Email | Password |
-|------|-------|----------|
-| **Admin** | rayhan-admin@gmail.com | Admin@123 |
-| **Employee** | amalia-employee@mlakumlaku.com | Employee@123 |
-| **Tourist** | yasmin-tourist@gmail.com | Tourist@123 |
+| ---- | ----- | -------- |
+| **Admin** | <rayhan-admin@gmail.com> | Admin@123 |
+| **Employee** | <amalia-employee@mlakumlaku.com> | Employee@123 |
+| **Tourist** | <yasmin-tourist@gmail.com> | Tourist@123 |
 
 ## 📁 Project Structure
 
-```
+```text
 biro-perjalanan-mlaku-mlaku/
 ├── src/
 │   ├── auth/                      # Authentication & Authorization Module
@@ -77,10 +81,11 @@ biro-perjalanan-mlaku-mlaku/
 ## 🔌 API Endpoints
 
 ### 🔐 Auth Module
+
 **Base Path**: `/api/v1/auth`
 
 | Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
+| ------ | -------- | ----------- | ---- |
 | POST | `/register` | Register new tourist account | Public |
 | POST | `/admin/register-employee` | Register employee account | Admin |
 | POST | `/login` | Login | Public |
@@ -88,10 +93,11 @@ biro-perjalanan-mlaku-mlaku/
 | GET | `/test` | Test authentication | JWT |
 
 ### 👥 User Module
+
 **Base Path**: `/api/v1/user`
 
 | Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
+| ------ | -------- | ----------- | ---- |
 | GET | `/tourist` | Get all tourists | Admin/Employee |
 | POST | `/tourist` | Create tourist profile | Tourist |
 | PATCH | `/tourist` | Update tourist profile | Tourist |
@@ -105,10 +111,11 @@ biro-perjalanan-mlaku-mlaku/
 | PATCH | `/{id}/toggle-status` | Toggle user active status | Admin |
 
 ### 🏖️ Travel Spot Module
+
 **Base Path**: `/api/v1/travel-spot`
 
 | Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
+| ------ | -------- | ----------- | ---- |
 | POST | `/` | Create travel spot | Admin/Employee |
 | GET | `/` | Get all travel spots | JWT |
 | GET | `/search` | Search travel spots | JWT |
@@ -117,10 +124,11 @@ biro-perjalanan-mlaku-mlaku/
 | DELETE | `/{id}` | Delete travel spot | Admin/Employee |
 
 ### 📦 Travel Package Module
+
 **Base Path**: `/api/v1/travel-package`
 
 | Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
+| ------ | -------- | ----------- | ---- |
 | POST | `/` | Create travel package | Admin/Employee |
 | GET | `/` | Get all packages | JWT |
 | GET | `/{id}` | Get package by ID | JWT |
@@ -133,10 +141,11 @@ biro-perjalanan-mlaku-mlaku/
 | DELETE | `/{packageId}/itinerary/{itineraryId}` | Delete itinerary | Admin/Employee |
 
 ### 🎫 Travel Trip Module
+
 **Base Path**: `/api/v1/travel-trip`
 
 | Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
+| ------ | -------- | ----------- | ---- |
 | POST | `/` | Create trip booking | Tourist |
 | GET | `/` | Get all trips | Admin/Employee |
 | GET | `/upcoming` | Get upcoming trips | JWT |
@@ -240,8 +249,9 @@ npm run start:dev
 ```
 
 API will be available at:
-- **API**: http://localhost:3000/api/v1
-- **Swagger**: http://localhost:3000/api
+
+- **API**: <http://localhost:3000/api/v1>
+- **Swagger**: <http://localhost:3000/api>
 
 ## 📜 Available Scripts
 
